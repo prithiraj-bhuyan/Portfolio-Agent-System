@@ -292,7 +292,7 @@ class Orchestrator:
     def __init__(self, initial_cash: float = 100_000.0,
                  watchlist: list[str] | None = None):
         self.state = GlobalState(initial_cash=initial_cash)
-        self.watchlist = watchlist or ["AAPL", "GOOGL", "MSFT"]
+        self.watchlist = watchlist or ["AAPL", "ADBE", "MSFT"]
         self.strategist = PortfolioStrategist(self.watchlist)
         self.graph = build_graph()
 
@@ -345,7 +345,7 @@ def main():
 
     orch = Orchestrator(
         initial_cash=100_000.0,
-        watchlist=["AAPL", "GOOGL", "MSFT"],
+        watchlist=["AAPL", "ADBE", "MSFT"],
     )
 
     results = orch.run_cycle()

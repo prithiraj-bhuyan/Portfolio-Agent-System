@@ -27,10 +27,10 @@ _FUNDAMENTALS = {
                  dividend_yield=0.005, beta=1.24, high_52w=237.23, low_52w=164.08,
                  profit_margin=0.264, revenue_growth=0.049, debt_to_equity=1.87,
                  roe=1.609, sector="Technology", industry="Consumer Electronics"),
-    "GOOGL": dict(market_cap=2.1e12, pe_ratio=22.3, forward_pe=19.8, eps=7.54,
-                  dividend_yield=0.005, beta=1.06, high_52w=191.75, low_52w=130.67,
-                  profit_margin=0.292, revenue_growth=0.139, debt_to_equity=0.42,
-                  roe=0.324, sector="Technology", industry="Internet Content"),
+    "ADBE": dict(market_cap=2.0e11, pe_ratio=44.5, forward_pe=28.3, eps=11.82,
+                  dividend_yield=0.0, beta=1.28, high_52w=638.25, low_52w=432.15,
+                  profit_margin=0.354, revenue_growth=0.112, debt_to_equity=0.58,
+                  roe=0.368, sector="Technology", industry="Application Software"),
     "MSFT": dict(market_cap=3.1e12, pe_ratio=35.2, forward_pe=29.7, eps=11.86,
                  dividend_yield=0.007, beta=0.89, high_52w=468.35, low_52w=362.90,
                  profit_margin=0.356, revenue_growth=0.162, debt_to_equity=0.35,
@@ -45,7 +45,7 @@ _FUNDAMENTALS = {
                  roe=1.155, sector="Technology", industry="Semiconductors"),
 }
 
-_BASE_PRICES = {"AAPL": 195.50, "GOOGL": 176.30, "MSFT": 422.80,
+_BASE_PRICES = {"AAPL": 195.50, "ADBE": 525.40, "MSFT": 422.80,
                 "AMZN": 186.40, "NVDA": 882.50}
 
 _NEWS = {
@@ -55,11 +55,11 @@ _NEWS = {
         dict(title="Services revenue hits all-time high of $25B", sentiment=0.70, source="CNBC"),
         dict(title="China iPhone sales decline 3% amid competition", sentiment=-0.40, source="WSJ"),
     ],
-    "GOOGL": [
-        dict(title="Google Cloud revenue surges 35% year-over-year", sentiment=0.80, source="Reuters"),
-        dict(title="Gemini AI adoption accelerates across enterprise", sentiment=0.65, source="TechCrunch"),
-        dict(title="DoJ antitrust remedies hearing raises uncertainty", sentiment=-0.55, source="WSJ"),
-        dict(title="YouTube ad revenue jumps 14%", sentiment=0.50, source="Bloomberg"),
+    "ADBE": [
+        dict(title="Adobe Firefly AI generates over 12 billion images", sentiment=0.80, source="Reuters"),
+        dict(title="Creative Cloud ARR surpasses $13B milestone", sentiment=0.70, source="Bloomberg"),
+        dict(title="Adobe faces growing competition from Canva and Figma alternatives", sentiment=-0.40, source="WSJ"),
+        dict(title="Document Cloud AI assistant drives enterprise upsell", sentiment=0.55, source="TechCrunch"),
     ],
     "MSFT": [
         dict(title="Azure cloud growth accelerates to 31%", sentiment=0.80, source="Reuters"),

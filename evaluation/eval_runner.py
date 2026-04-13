@@ -34,15 +34,15 @@ def test(name, category):
       "end-to-end")
 def test_consensus_buy():
     """When all 4 analysts agree on BUY, the system should execute a trade."""
-    orch = Orchestrator(initial_cash=100_000, watchlist=["GOOGL"])
-    results = orch.run_cycle(["GOOGL"])
-    r = results["results"]["GOOGL"]
+    orch = Orchestrator(initial_cash=100_000, watchlist=["ADBE"])
+    results = orch.run_cycle(["ADBE"])
+    r = results["results"]["ADBE"]
     trade_executed = "EXECUTED" in r["outcome"]
-    has_holdings = "GOOGL" in orch.state.portfolio.holdings
+    has_holdings = "ADBE" in orch.state.portfolio.holdings
 
     return {
         "passed": trade_executed and has_holdings,
-        "expected": "Trade executed for GOOGL",
+        "expected": "Trade executed for ADBE",
         "actual": r["outcome"],
         "details": {
             "holdings": orch.state.portfolio.holdings,
@@ -131,7 +131,7 @@ def test_insufficient_cash():
       "portfolio-management")
 def test_multi_ticker():
     """System should handle multiple tickers and build diversified portfolio."""
-    orch = Orchestrator(initial_cash=100_000, watchlist=["AAPL", "GOOGL", "MSFT"])
+    orch = Orchestrator(initial_cash=100_000, watchlist=["AAPL", "ADBE", "MSFT"])
     results = orch.run_cycle()
 
     num_positions = len(orch.state.portfolio.holdings)
@@ -155,8 +155,8 @@ def test_multi_ticker():
       "observability")
 def test_trace_completeness():
     """Every agent action should appear in the interaction trace."""
-    orch = Orchestrator(initial_cash=100_000, watchlist=["GOOGL"])
-    orch.run_cycle(["GOOGL"])
+    orch = Orchestrator(initial_cash=100_000, watchlist=["ADBE"])
+    orch.run_cycle(["ADBE"])
     trace = orch.state.interaction_trace
 
     agents_seen = set(e["agent"] for e in trace)
@@ -243,8 +243,7 @@ def run_all():
     print(f"{'═'*60}")
 
     # Save results
-    os.makedirs("evaluation", exist_ok=True)
-    with open("evaluation/test_results.json", "w") as f:
+    with open("test_results.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
     print(f"\n  Saved: evaluation/test_results.json")
 

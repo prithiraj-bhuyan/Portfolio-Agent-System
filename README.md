@@ -14,11 +14,17 @@ A multi-agent portfolio management system that autonomously analyzes stocks and 
 ## Quick Start
 
 ```bash
+# Create and activate a virtual environment
+python -m venv my-env
+source my-env/bin/activate   # macOS/Linux
+# my-env\Scripts\activate    # Windows
+
 # Install dependencies
 pip install -r requirements.txt
 
 # (Optional) Enable LLM-powered analysis
-export GROQ_API_KEY="gsk_your_key_here"
+# Create a .env file in the project root:
+echo 'GROQ_API_KEY=gsk_your_key_here' > .env
 
 # Run the prototype
 python orchestrator.py
@@ -27,7 +33,7 @@ python orchestrator.py
 python evaluation/eval_runner.py
 ```
 
-The system runs with deterministic mock data if no API key is set.
+The API key is loaded automatically from the `.env` file via `python-dotenv`. The system runs with deterministic mock data if no API key is set.
 
 ## Architecture
 
@@ -74,16 +80,16 @@ Conditional edges:
 ## Sample Output
 
 ```
-PIPELINE: GOOGL
+PIPELINE: ADBE
   [Fundamental ] BUY     conf=0.75
   [Technical   ] BUY     conf=0.52
   [Sentiment   ] BUY     conf=0.60
   [News        ] HOLD    conf=0.54
   Debate: BUY  conf=0.54
-  Trader: BUY 65 shares
+  Trader: BUY 22 shares
   Risk: LOW  Approved
   Human: ✓ APPROVED
-  → EXECUTED: BUY 65 × GOOGL @ $184.08 = $11,965.20
+  → EXECUTED: BUY 22 × ADBE @ $548.62 = $12,069.64
 ```
 
 ## Evaluation Results

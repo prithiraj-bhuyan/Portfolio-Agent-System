@@ -1,26 +1,26 @@
 [
   {
-    "timestamp": "2026-04-12T23:42:55.601225",
+    "timestamp": "2026-04-12T20:02:21.069232",
     "agent": "fundamental",
     "action": "REPORT",
     "details": {
       "ticker": "AAPL",
-      "signal": "HOLD",
-      "confidence": 0.59
+      "signal": "BUY",
+      "confidence": 0.8
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.601476",
+    "timestamp": "2026-04-12T20:02:22.179690",
     "agent": "technical",
     "action": "REPORT",
     "details": {
       "ticker": "AAPL",
-      "signal": "HOLD",
-      "confidence": 0.4
+      "signal": "STRONG_BUY",
+      "confidence": 0.9
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.601560",
+    "timestamp": "2026-04-12T20:02:22.179955",
     "agent": "sentiment",
     "action": "REPORT",
     "details": {
@@ -30,7 +30,7 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.601631",
+    "timestamp": "2026-04-12T20:02:22.180034",
     "agent": "news",
     "action": "REPORT",
     "details": {
@@ -40,46 +40,80 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.602403",
+    "timestamp": "2026-04-12T20:02:29.450167",
     "agent": "ResearchTeam",
     "action": "DEBATE",
     "details": {
       "ticker": "AAPL",
-      "view": "HOLD"
+      "view": "BUY"
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.602936",
+    "timestamp": "2026-04-12T20:02:32.930504",
     "agent": "Trader",
     "action": "PROPOSAL",
     "details": {
       "ticker": "AAPL",
-      "action": "HOLD",
-      "qty": 0
+      "action": "BUY",
+      "qty": 200
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.604377",
+    "timestamp": "2026-04-12T20:02:32.932077",
+    "agent": "RiskTeam",
+    "action": "ASSESSMENT",
+    "details": {
+      "ticker": "AAPL",
+      "approved": true,
+      "level": "MODERATE"
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:02:32.932560",
+    "agent": "FundManager",
+    "action": "DECISION",
+    "details": {
+      "ticker": "AAPL",
+      "action": "BUY",
+      "qty": 90
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:02:32.933613",
+    "agent": "Execution",
+    "action": "TRADE",
+    "details": {
+      "timestamp": "2026-04-12T20:02:32.933605",
+      "ticker": "AAPL",
+      "action": "BUY",
+      "quantity": 90,
+      "price": 221.56,
+      "total": 19940.4,
+      "cash_after": 80059.6
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:02:33.844549",
     "agent": "fundamental",
     "action": "REPORT",
     "details": {
       "ticker": "GOOGL",
       "signal": "BUY",
-      "confidence": 0.75
+      "confidence": 0.8
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.604592",
+    "timestamp": "2026-04-12T20:02:37.335945",
     "agent": "technical",
     "action": "REPORT",
     "details": {
       "ticker": "GOOGL",
       "signal": "BUY",
-      "confidence": 0.52
+      "confidence": 0.8
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.604664",
+    "timestamp": "2026-04-12T20:02:37.336226",
     "agent": "sentiment",
     "action": "REPORT",
     "details": {
@@ -89,7 +123,7 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.604707",
+    "timestamp": "2026-04-12T20:02:37.336306",
     "agent": "news",
     "action": "REPORT",
     "details": {
@@ -99,7 +133,7 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.605125",
+    "timestamp": "2026-04-12T20:03:04.062582",
     "agent": "ResearchTeam",
     "action": "DEBATE",
     "details": {
@@ -108,17 +142,17 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.605802",
+    "timestamp": "2026-04-12T20:03:06.412436",
     "agent": "Trader",
     "action": "PROPOSAL",
     "details": {
       "ticker": "GOOGL",
       "action": "BUY",
-      "qty": 65
+      "qty": 40
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.606410",
+    "timestamp": "2026-04-12T20:03:06.413932",
     "agent": "RiskTeam",
     "action": "ASSESSMENT",
     "details": {
@@ -128,51 +162,51 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.606747",
+    "timestamp": "2026-04-12T20:03:06.414386",
     "agent": "FundManager",
     "action": "DECISION",
     "details": {
       "ticker": "GOOGL",
       "action": "BUY",
-      "qty": 65
+      "qty": 40
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.607605",
+    "timestamp": "2026-04-12T20:03:06.415197",
     "agent": "Execution",
     "action": "TRADE",
     "details": {
-      "timestamp": "2026-04-12T23:42:55.607600",
+      "timestamp": "2026-04-12T20:03:06.415189",
       "ticker": "GOOGL",
       "action": "BUY",
-      "quantity": 65,
+      "quantity": 40,
       "price": 184.08,
-      "total": 11965.2,
-      "cash_after": 88034.8
+      "total": 7363.2,
+      "cash_after": 72696.4
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.608880",
+    "timestamp": "2026-04-12T20:03:09.588707",
     "agent": "fundamental",
     "action": "REPORT",
     "details": {
       "ticker": "MSFT",
       "signal": "BUY",
-      "confidence": 0.75
+      "confidence": 0.8
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.609088",
+    "timestamp": "2026-04-12T20:03:11.640199",
     "agent": "technical",
     "action": "REPORT",
     "details": {
       "ticker": "MSFT",
-      "signal": "HOLD",
-      "confidence": 0.4
+      "signal": "STRONG_BUY",
+      "confidence": 0.9
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.609165",
+    "timestamp": "2026-04-12T20:03:11.640463",
     "agent": "sentiment",
     "action": "REPORT",
     "details": {
@@ -182,7 +216,7 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.609198",
+    "timestamp": "2026-04-12T20:03:11.640543",
     "agent": "news",
     "action": "REPORT",
     "details": {
@@ -192,7 +226,7 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.609580",
+    "timestamp": "2026-04-12T20:03:37.752554",
     "agent": "ResearchTeam",
     "action": "DEBATE",
     "details": {
@@ -201,17 +235,17 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.609965",
+    "timestamp": "2026-04-12T20:03:40.239200",
     "agent": "Trader",
     "action": "PROPOSAL",
     "details": {
       "ticker": "MSFT",
       "action": "BUY",
-      "qty": 21
+      "qty": 30
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.610501",
+    "timestamp": "2026-04-12T20:03:40.240783",
     "agent": "RiskTeam",
     "action": "ASSESSMENT",
     "details": {
@@ -221,27 +255,27 @@
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.610792",
+    "timestamp": "2026-04-12T20:03:40.241214",
     "agent": "FundManager",
     "action": "DECISION",
     "details": {
       "ticker": "MSFT",
       "action": "BUY",
-      "qty": 21
+      "qty": 30
     }
   },
   {
-    "timestamp": "2026-04-12T23:42:55.611593",
+    "timestamp": "2026-04-12T20:03:40.242055",
     "agent": "Execution",
     "action": "TRADE",
     "details": {
-      "timestamp": "2026-04-12T23:42:55.611588",
+      "timestamp": "2026-04-12T20:03:40.242049",
       "ticker": "MSFT",
       "action": "BUY",
-      "quantity": 21,
+      "quantity": 30,
       "price": 484.62,
-      "total": 10177.02,
-      "cash_after": 77857.78
+      "total": 14538.6,
+      "cash_after": 58157.8
     }
   }
 ]
