@@ -1,0 +1,133 @@
+[
+  {
+    "case_id": 1,
+    "name": "Happy Path: Strong consensus BUY",
+    "category": "end-to-end",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Trade executed for GOOGL",
+    "actual": "EXECUTED: BUY 65 \u00d7 GOOGL @ $184.08 = $11,965.20",
+    "details": {
+      "holdings": {
+        "GOOGL": 65
+      },
+      "cash": 88034.8,
+      "stages_completed": 7
+    }
+  },
+  {
+    "case_id": 2,
+    "name": "Mixed Signals: Analysts disagree \u2192 HOLD",
+    "category": "coordination",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "HOLD \u2014 no trade when signals conflict",
+    "actual": "HOLD \u2014 no trade proposed",
+    "details": {
+      "analyst_signals": [
+        {
+          "Fundamental": {
+            "signal": "HOLD",
+            "confidence": 0.59,
+            "summary": "AAPL: PE=28.5, Growth=4.9%, Margin=26.4%, ROE=160.9%"
+          },
+          "Technical": {
+            "signal": "HOLD",
+            "confidence": 0.4,
+            "summary": "AAPL: RSI=86.6, MACD=BULLISH, Trend=UPTREND"
+          },
+          "Sentiment": {
+            "signal": "HOLD",
+            "confidence": 0.4,
+            "summary": "AAPL social sentiment: NEUTRAL (score=0.002), volume=4296, trending=True"
+          },
+          "News": {
+            "signal": "BUY",
+            "confidence": 0.58,
+            "summary": "AAPL news: avg_sentiment=0.412, 4 articles. Macro: Fed holding rates; inflation cooling; tech sector resilient"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "case_id": 3,
+    "name": "Risk Gate: Concentration limit enforcement",
+    "category": "risk-management",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Concentration \u2264 20%",
+    "actual": "0.0%",
+    "details": {
+      "position_value": 0,
+      "total_value": 50000
+    }
+  },
+  {
+    "case_id": 4,
+    "name": "Failure: Insufficient cash blocks trade",
+    "category": "error-handling",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Trade blocked \u2014 insufficient cash",
+    "actual": "REJECTED by fund manager",
+    "details": {
+      "starting_cash": 500,
+      "ending_cash": 500
+    }
+  },
+  {
+    "case_id": 5,
+    "name": "Portfolio: Multi-ticker diversified allocation",
+    "category": "portfolio-management",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "\u22651 position, cash > 0 (no over-allocation)",
+    "actual": "2 positions, $77,857.78 cash",
+    "details": {
+      "holdings": {
+        "GOOGL": 65,
+        "MSFT": 21
+      },
+      "transactions": 2,
+      "cash_deployed_pct": 22.1
+    }
+  },
+  {
+    "case_id": 6,
+    "name": "Audit: Interaction trace captures all stages",
+    "category": "observability",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Trace includes: {'news', 'fundamental', 'ResearchTeam', 'technical', 'sentiment'}",
+    "actual": "Found: {'ResearchTeam', 'Execution', 'technical', 'sentiment', 'Trader', 'news', 'fundamental', 'RiskTeam', 'FundManager'}",
+    "details": {
+      "trace_entries": 9,
+      "agents": [
+        "Execution",
+        "FundManager",
+        "ResearchTeam",
+        "RiskTeam",
+        "Trader",
+        "fundamental",
+        "news",
+        "sentiment",
+        "technical"
+      ]
+    }
+  },
+  {
+    "case_id": 7,
+    "name": "Sell Flow: Liquidate existing holding",
+    "category": "end-to-end",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Pipeline handles existing position gracefully",
+    "actual": "HOLD \u2014 no trade proposed",
+    "details": {
+      "holdings_after": {
+        "AAPL": 100
+      }
+    }
+  }
+]
