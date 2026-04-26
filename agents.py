@@ -48,7 +48,8 @@ Respond ONLY with the JSON, no other text."""
 
         data = call_llm_json(self.SYS, f"""Analyze {ticker}:
 Fundamentals: {json.dumps(fund, indent=1)}
-Price: ${price['current_price']}, Period return: {price['period_return_pct']}%""")
+Price: ${price['current_price']}, Period return: {price['period_return_pct']}%""",
+            caller="FundamentalAnalyst")
 
         if data and "signal" in data:
             report = AnalystReport(
@@ -101,7 +102,8 @@ Respond ONLY with the JSON."""
 
         data = call_llm_json(self.SYS,
             f"Analyze {ticker} technicals:\n{json.dumps(ind, indent=1)}\n"
-            f"Current price: ${price['current_price']}")
+            f"Current price: ${price['current_price']}",
+            caller="TechnicalAnalyst")
 
         if data and "signal" in data:
             report = AnalystReport(
@@ -219,8 +221,8 @@ Determine the prevailing view. Respond with JSON:
             if rounds:
                 ctx += f"\n\nPrior debate:\n{json.dumps(rounds, indent=1)}"
 
-            bull = call_llm_json(self.BULL_SYS, ctx)
-            bear = call_llm_json(self.BEAR_SYS, ctx)
+            bull = call_llm_json(self.BULL_SYS, ctx, caller="BullishResearcher")
+            bear = call_llm_json(self.BEAR_SYS, ctx, caller="BearishResearcher")
             rounds.append({
                 "round": rnd + 1,
                 "bull": bull or self._fallback_bull(reports),
@@ -229,7 +231,7 @@ Determine the prevailing view. Respond with JSON:
 
         # Facilitator
         facil_ctx = f"Ticker: {ticker}\nAnalyst Reports:\n{report_text}\n\nDebate:\n{json.dumps(rounds, indent=1)}"
-        facil = call_llm_json(self.FACIL_SYS, facil_ctx)
+        facil = call_llm_json(self.FACIL_SYS, facil_ctx, caller="DebateFacilitator")
 
         if facil and "prevailing_view" in facil:
             view = Signal[facil["prevailing_view"]]
@@ -297,7 +299,7 @@ Respond ONLY with JSON:
                   f"Debate summary: {debate.facilitator_summary if debate else 'N/A'}\n"
                   f"Analyst signals: {', '.join(r.signal.value for r in reports)}")
 
-        data = call_llm_json(self.SYS, prompt)
+        data = call_llm_json(self.SYS, prompt, caller="TraderAgent")
 
         if data and "action" in data:
             prop = TradeProposal(

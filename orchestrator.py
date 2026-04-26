@@ -14,12 +14,18 @@ Conditional edges:
   - After trader: if HOLD → skip to end
   - After fund_manager: if rejected → skip to end
   - After human_gate: if rejected → skip to end
+
+Phase 3 additions:
+  - SQLite persistence for multi-day runs
+  - LLM call logging for CLASSic Report
+  - Interactive human gate mode for Streamlit
 """
 
 from __future__ import annotations
 import json
 from typing import TypedDict, Any, Optional, Literal
 from datetime import datetime
+import uuid
 
 from langgraph.graph import StateGraph, END
 
@@ -170,26 +176,43 @@ def fund_manager_node(state: PipelineState) -> PipelineState:
     return state
 
 
+# Module-level flag: when True, human gate blocks execution (for Streamlit)
+INTERACTIVE_MODE = False
+
+
 def human_gate_node(state: PipelineState) -> PipelineState:
-    """Stage 6: Human-in-the-loop approval (auto-approved for prototype)."""
+    """Stage 6: Human-in-the-loop approval.
+    
+    In CLI mode (INTERACTIVE_MODE=False): auto-approved.
+    In Streamlit Interactive mode (INTERACTIVE_MODE=True): blocks execution,
+    marks trade as PENDING for the user to approve in the dashboard.
+    """
     ticker = state["ticker"]
     gs = state["global_state"]
     decision = gs.final_decisions.get(ticker)
 
-    # For prototype: auto-approve. In production: interactive prompt.
-    approved = True
-    if decision:
-        decision.approved_by_human = approved
-
-    print(f"    Human approval: {'✓ APPROVED' if approved else '✗ REJECTED'}")
+    if INTERACTIVE_MODE:
+        # Block execution — trade stays pending for human review
+        approved = False
+        if decision:
+            decision.approved_by_human = False
+        print(f"    Human approval: ⏳ PENDING (Interactive mode — approve in dashboard)")
+        state["outcome"] = f"PENDING APPROVAL: {decision.action.value} {decision.quantity} shares" if decision else "PENDING APPROVAL"
+    else:
+        # Auto-approve for CLI / eval runs
+        approved = True
+        if decision:
+            decision.approved_by_human = True
+        print(f"    Human approval: ✓ APPROVED")
 
     state["stage_log"].append({
         "stage": "human_gate", "timestamp": datetime.now().isoformat(),
         "approved": approved,
+        "mode": "interactive" if INTERACTIVE_MODE else "auto",
     })
     state["current_stage"] = "human_gate"
     state["should_continue"] = approved
-    if not approved:
+    if not approved and not INTERACTIVE_MODE:
         state["outcome"] = "REJECTED by human"
     return state
 
@@ -290,15 +313,22 @@ class Orchestrator:
     """Runs the LangGraph pipeline for multiple tickers."""
 
     def __init__(self, initial_cash: float = 100_000.0,
-                 watchlist: list[str] | None = None):
+                 watchlist: list[str] | None = None,
+                 interactive: bool = False):
         self.state = GlobalState(initial_cash=initial_cash)
         self.watchlist = watchlist or ["AAPL", "ADBE", "MSFT"]
         self.strategist = PortfolioStrategist(self.watchlist)
+        self.interactive = interactive
         self.graph = build_graph()
+        self._pending_results = {}  # ticker → stage_log for pending trades
 
     def run_cycle(self, tickers: list[str] | None = None) -> dict:
+        global INTERACTIVE_MODE
+        INTERACTIVE_MODE = self.interactive
+
         tickers = tickers or self.strategist.select_tickers(self.state)
         cycle_start = datetime.now().isoformat()
+        cycle_id = str(uuid.uuid4())[:8]
         results = {}
 
         for ticker in tickers:
@@ -320,10 +350,27 @@ class Orchestrator:
                 "outcome": final["outcome"],
                 "stages": final["stage_log"],
             }
+            # Save stage log for pending trades so we can append execution later
+            if self.interactive and "PENDING" in final["outcome"]:
+                self._pending_results[ticker] = final["stage_log"]
             print(f"\n  → OUTCOME: {final['outcome']}")
 
+        INTERACTIVE_MODE = False  # reset after cycle
+
         summary = self.strategist.portfolio_summary(self.state)
+
+        # Persist state
+        try:
+            from persistence import init_db, save_state, save_llm_logs
+            from llm_interface import LLM_CALL_LOG
+            init_db()
+            save_state(self.state, cycle_id)
+            save_llm_logs(LLM_CALL_LOG, cycle_id)
+        except Exception as e:
+            print(f"  [PERSISTENCE] Warning: {e}")
+
         return {
+            "cycle_id": cycle_id,
             "cycle_start": cycle_start,
             "cycle_end": datetime.now().isoformat(),
             "tickers": tickers,
@@ -331,6 +378,40 @@ class Orchestrator:
             "portfolio": summary,
             "transactions": self.state.transaction_log,
         }
+
+    def execute_pending_trade(self, ticker: str) -> str:
+        """Execute a trade that was approved by the human in Interactive mode.
+        Returns the outcome string."""
+        decision = self.state.final_decisions.get(ticker)
+        if not decision:
+            return f"No pending decision for {ticker}"
+        if decision.action == TradeAction.HOLD:
+            return f"{ticker}: HOLD — nothing to execute"
+
+        decision.approved_by_human = True
+        price = MarketDataTool().get_price_history(ticker)["current_price"]
+
+        try:
+            rec = self.state.execute_trade(ticker, decision.action, decision.quantity, price)
+            outcome = (f"EXECUTED: {decision.action.value} {decision.quantity} "
+                       f"× {ticker} @ ${price:.2f} = ${rec['total']:,.2f}")
+            # Persist updated state
+            try:
+                from persistence import init_db, save_state
+                init_db()
+                save_state(self.state, f"exec_{ticker}")
+            except Exception:
+                pass
+            return outcome
+        except ValueError as e:
+            return f"FAILED: {e}"
+
+    def reject_pending_trade(self, ticker: str) -> str:
+        """Reject a pending trade."""
+        decision = self.state.final_decisions.get(ticker)
+        if decision:
+            decision.approved_by_human = False
+        return f"{ticker}: REJECTED by human"
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -340,7 +421,7 @@ class Orchestrator:
 def main():
     print("=" * 60)
     print("  AGENTIC PORTFOLIO MANAGEMENT SYSTEM")
-    print("  LangGraph + Groq Prototype  —  Phase 2 Demo")
+    print("  LangGraph + Groq  —  Phase 3 Final Product")
     print("=" * 60)
 
     orch = Orchestrator(
@@ -365,6 +446,18 @@ def main():
         print(f"    {tx['action']:4s} {tx['quantity']:>4d} {tx['ticker']:5s} "
               f"@ ${tx['price']:>8.2f}  =  ${tx['total']:>10,.2f}")
 
+    # ── LLM Metrics ──
+    from llm_interface import get_llm_metrics
+    metrics = get_llm_metrics()
+    print(f"\n  LLM Calls: {metrics['total_calls']} "
+          f"(Success: {metrics['successful_calls']}, "
+          f"Failed: {metrics['failed_calls']}, "
+          f"Skipped: {metrics['skipped_calls']})")
+    print(f"  Tokens:    {metrics['total_tokens']:,}")
+    print(f"  Cost:      ${metrics['total_cost_usd']:.4f}")
+    print(f"  Latency:   avg={metrics['avg_latency_ms']:.0f}ms, "
+          f"p95={metrics['p95_latency_ms']:.0f}ms")
+
     # ── Save artifacts ──
     import os
     os.makedirs("sample_runs", exist_ok=True)
@@ -375,8 +468,12 @@ def main():
     with open("sample_runs/cycle_results.json", "w") as f:
         json.dump(results, f, indent=2, default=str)
 
+    with open("sample_runs/llm_metrics.json", "w") as f:
+        json.dump(metrics, f, indent=2, default=str)
+
     print(f"\n  Saved: sample_runs/interaction_trace.json")
     print(f"  Saved: sample_runs/cycle_results.json")
+    print(f"  Saved: sample_runs/llm_metrics.json")
 
     return results
 

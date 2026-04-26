@@ -1,11 +1,25 @@
 """
 Tools layer — each tool provides structured data to agents.
-Uses deterministic mock data per ticker for reproducible prototype.
-In production, replace with live APIs (yfinance, NewsAPI, Reddit, etc.)
+
+Phase 3 upgrades:
+  - DATA_MODE toggle: "mock" (deterministic), "live" (yfinance + Finnhub), "backtest"
+  - Live price data via yfinance
+  - Live news via Finnhub API (free tier)
+  - Mock data preserved for reproducibility and offline testing
+
+Set DATA_MODE in .env or environment:
+  DATA_MODE=mock   → deterministic mock data (default)
+  DATA_MODE=live   → real market data with mock fallback
 """
 
+import os
 from datetime import datetime, timedelta
 import hashlib, math
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DATA_MODE = os.environ.get("DATA_MODE", "mock").lower()
 
 
 # ── Helper: deterministic random per ticker ────────────────────────
@@ -87,6 +101,47 @@ _NEWS = {
 class MarketDataTool:
 
     def get_price_history(self, ticker: str, days: int = 30) -> dict:
+        """Get price history — live via yfinance or mock data."""
+        if DATA_MODE == "live":
+            return self._live_price(ticker, days)
+        return self._mock_price(ticker, days)
+
+    def _live_price(self, ticker: str, days: int = 30) -> dict:
+        """Fetch real price data from yfinance."""
+        try:
+            import yfinance as yf
+            stock = yf.Ticker(ticker)
+            end = datetime.now()
+            start = end - timedelta(days=days + 5)  # extra buffer for weekends
+            df = stock.history(start=start.strftime("%Y-%m-%d"),
+                               end=end.strftime("%Y-%m-%d"))
+            if df.empty:
+                print(f"  [DATA] yfinance returned no data for {ticker}, falling back to mock")
+                return self._mock_price(ticker, days)
+
+            history = []
+            for date, row in df.iterrows():
+                history.append({"date": str(date.date()), "close": round(row["Close"], 2)})
+            history = history[-days:]  # trim to requested days
+
+            current = history[-1]["close"]
+            return dict(
+                ticker=ticker,
+                current_price=current,
+                open=round(df.iloc[-1]["Open"], 2),
+                high=round(df.iloc[-1]["High"], 2),
+                low=round(df.iloc[-1]["Low"], 2),
+                volume=int(df.iloc[-1]["Volume"]),
+                price_history=history,
+                period_return_pct=round((current / history[0]["close"] - 1) * 100, 2),
+                data_source="yfinance_live",
+            )
+        except Exception as e:
+            print(f"  [DATA] yfinance error for {ticker}: {e}, falling back to mock")
+            return self._mock_price(ticker, days)
+
+    def _mock_price(self, ticker: str, days: int = 30) -> dict:
+        """Deterministic mock price data."""
         rng = _DRng(ticker, 1)
         base = _BASE_PRICES.get(ticker, 120.0)
         price = base * 0.96
@@ -107,15 +162,52 @@ class MarketDataTool:
             volume=rng.randint(30_000_000, 70_000_000),
             price_history=history,
             period_return_pct=round((current / history[0]["close"] - 1) * 100, 2),
+            data_source="mock",
         )
 
     def get_fundamentals(self, ticker: str) -> dict:
+        """Get fundamental data — uses static curated data."""
+        if DATA_MODE == "live":
+            return self._live_fundamentals(ticker)
         base = _FUNDAMENTALS.get(ticker, dict(
             market_cap=5e11, pe_ratio=18.0, forward_pe=15.5, eps=5.0,
             dividend_yield=0.01, beta=1.0, high_52w=150.0, low_52w=100.0,
             profit_margin=0.20, revenue_growth=0.10, debt_to_equity=0.50,
             roe=0.25, sector="Technology", industry="Software"))
-        return {"ticker": ticker, **base}
+        return {"ticker": ticker, "data_source": "mock", **base}
+
+    def _live_fundamentals(self, ticker: str) -> dict:
+        """Fetch real fundamentals from yfinance."""
+        try:
+            import yfinance as yf
+            stock = yf.Ticker(ticker)
+            info = stock.info
+            return {
+                "ticker": ticker,
+                "data_source": "yfinance_live",
+                "market_cap": info.get("marketCap", 0),
+                "pe_ratio": info.get("trailingPE", 0),
+                "forward_pe": info.get("forwardPE", 0),
+                "eps": info.get("trailingEps", 0),
+                "dividend_yield": info.get("dividendYield", 0) or 0,
+                "beta": info.get("beta", 1.0),
+                "high_52w": info.get("fiftyTwoWeekHigh", 0),
+                "low_52w": info.get("fiftyTwoWeekLow", 0),
+                "profit_margin": info.get("profitMargins", 0) or 0,
+                "revenue_growth": info.get("revenueGrowth", 0) or 0,
+                "debt_to_equity": info.get("debtToEquity", 0) / 100 if info.get("debtToEquity") else 0.5,
+                "roe": info.get("returnOnEquity", 0) or 0,
+                "sector": info.get("sector", "Unknown"),
+                "industry": info.get("industry", "Unknown"),
+            }
+        except Exception as e:
+            print(f"  [DATA] yfinance fundamentals error for {ticker}: {e}, using mock")
+            base = _FUNDAMENTALS.get(ticker, dict(
+                market_cap=5e11, pe_ratio=18.0, forward_pe=15.5, eps=5.0,
+                dividend_yield=0.01, beta=1.0, high_52w=150.0, low_52w=100.0,
+                profit_margin=0.20, revenue_growth=0.10, debt_to_equity=0.50,
+                roe=0.25, sector="Technology", industry="Software"))
+            return {"ticker": ticker, "data_source": "mock_fallback", **base}
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -194,15 +286,70 @@ class SentimentTool:
             mention_volume=vol, trending=vol > 2500,
             sources=dict(reddit=round(rng.uniform(-0.3, 0.7), 3),
                          twitter=round(rng.uniform(-0.3, 0.7), 3)),
+            data_source="mock",
         )
 
 
 # ═══════════════════════════════════════════════════════════════════
-# Tool 4: News (mock — would use NewsAPI/Bloomberg in prod)
+# Tool 4: News (Finnhub live or mock)
 # ═══════════════════════════════════════════════════════════════════
 class NewsTool:
 
     def get_news(self, ticker: str) -> dict:
+        """Get news — live via Finnhub or mock data."""
+        if DATA_MODE == "live":
+            return self._live_news(ticker)
+        return self._mock_news(ticker)
+
+    def _live_news(self, ticker: str) -> dict:
+        """Fetch real news from Finnhub API."""
+        api_key = os.environ.get("FINNHUB_API_KEY", "")
+        if not api_key:
+            print(f"  [DATA] No FINNHUB_API_KEY set, falling back to mock news")
+            return self._mock_news(ticker)
+        try:
+            import finnhub
+            client = finnhub.Client(api_key=api_key)
+            end = datetime.now()
+            start = end - timedelta(days=7)
+            news = client.company_news(
+                ticker,
+                _from=start.strftime("%Y-%m-%d"),
+                to=end.strftime("%Y-%m-%d"))
+
+            if not news:
+                return self._mock_news(ticker)
+
+            articles = []
+            for n in news[:8]:  # limit to 8 articles
+                # Simple sentiment heuristic based on headline
+                headline = n.get("headline", "")
+                sentiment = 0.0
+                positive_words = ["growth", "record", "strong", "surge", "beat", "profit", "gain"]
+                negative_words = ["decline", "loss", "fall", "drop", "risk", "concern", "cut"]
+                for w in positive_words:
+                    if w in headline.lower(): sentiment += 0.2
+                for w in negative_words:
+                    if w in headline.lower(): sentiment -= 0.2
+                sentiment = max(-1.0, min(1.0, sentiment))
+                articles.append(dict(
+                    title=headline[:120],
+                    sentiment=round(sentiment, 3),
+                    source=n.get("source", "Unknown")))
+
+            avg = round(sum(a["sentiment"] for a in articles) / len(articles), 3) if articles else 0
+            return dict(
+                ticker=ticker, article_count=len(articles), articles=articles,
+                avg_sentiment=avg,
+                macro="Live market data — see individual articles for context",
+                data_source="finnhub_live",
+            )
+        except Exception as e:
+            print(f"  [DATA] Finnhub error for {ticker}: {e}, falling back to mock")
+            return self._mock_news(ticker)
+
+    def _mock_news(self, ticker: str) -> dict:
+        """Deterministic mock news data."""
         articles = _NEWS.get(ticker, [
             dict(title=f"{ticker} posts mixed results", sentiment=0.1, source="MW"),
             dict(title=f"Analysts raise {ticker} price target", sentiment=0.4, source="Reuters"),
@@ -210,7 +357,8 @@ class NewsTool:
         avg = round(sum(a["sentiment"] for a in articles) / len(articles), 3)
         return dict(ticker=ticker, article_count=len(articles), articles=articles,
                     avg_sentiment=avg,
-                    macro="Fed holding rates; inflation cooling; tech sector resilient")
+                    macro="Fed holding rates; inflation cooling; tech sector resilient",
+                    data_source="mock")
 
 
 # ═══════════════════════════════════════════════════════════════════

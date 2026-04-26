@@ -1,28 +1,29 @@
 {
-  "cycle_start": "2026-04-12T20:02:19.793135",
-  "cycle_end": "2026-04-12T20:03:40.242940",
+  "cycle_id": "4b620d8f",
+  "cycle_start": "2026-04-26T14:45:25.152018",
+  "cycle_end": "2026-04-26T14:45:25.161502",
   "tickers": [
     "AAPL",
-    "GOOGL",
+    "ADBE",
     "MSFT"
   ],
   "results": {
     "AAPL": {
-      "outcome": "EXECUTED: BUY 90 \u00d7 AAPL @ $221.56 = $19,940.40",
+      "outcome": "HOLD \u2014 no trade proposed",
       "stages": [
         {
           "stage": "analysts",
-          "timestamp": "2026-04-12T20:02:22.180053",
+          "timestamp": "2026-04-26T14:45:25.153508",
           "results": {
             "Fundamental": {
-              "signal": "BUY",
-              "confidence": 0.8,
-              "summary": "AAPL's strong profit margin, moderate revenue growth, and reasonable debt-to-equity ratio indicate a healthy financial p"
+              "signal": "HOLD",
+              "confidence": 0.59,
+              "summary": "AAPL: PE=28.5, Growth=4.9%, Margin=26.4%, ROE=160.9%"
             },
             "Technical": {
-              "signal": "STRONG_BUY",
-              "confidence": 0.9,
-              "summary": "AAPL's technical indicators are overwhelmingly bullish, with the stock price above its 10-day SMA and the MACD line indi"
+              "signal": "HOLD",
+              "confidence": 0.4,
+              "summary": "AAPL: RSI=86.6, MACD=BULLISH, Trend=UPTREND"
             },
             "Sentiment": {
               "signal": "HOLD",
@@ -38,135 +39,108 @@
         },
         {
           "stage": "debate",
-          "timestamp": "2026-04-12T20:02:29.450255",
-          "view": "BUY",
-          "confidence": 0.75,
-          "summary": "The prevailing view for AAPL is a buy, driven by the company's strong financial position, bullish technical indicators, and favorable news environment. The fundamental analysis highlights a healthy profit margin, moderate revenue growth, and reasonable debt-to-equity ratio, supporting a positive outlook. The technical analysis is overwhelmingly bullish, with the stock price above its 10-day SMA and a bullish MACD signal. Although there are concerns about overbought conditions and potential volatility, the overall trend and momentum indicators suggest continued upward momentum. The sentiment analysis is neutral, but the technical and fundamental analysis, combined with the positive news environment, suggest a buy signal with a confidence level of 0.75. The news environment, with the Fed holding rates, inflation cooling, and the tech sector showing resilience, further supports a buy signal. However, it's essential to exercise caution due to potential risks and uncertainties, including the high RSI value and uncertainty in market sentiment."
+          "timestamp": "2026-04-26T14:45:25.153832",
+          "view": "HOLD",
+          "confidence": 0.44,
+          "summary": "Weighted analyst score: 0.14. Bullish: 1/4, Bearish: 0/4."
         },
         {
           "stage": "trader",
-          "timestamp": "2026-04-12T20:02:32.930597",
-          "action": "BUY",
-          "quantity": 200,
-          "rationale": "Strong financial position, bullish technical indicators, and favorable news environment support a buy signal"
-        },
-        {
-          "stage": "risk",
-          "timestamp": "2026-04-12T20:02:32.932123",
-          "risk_level": "MODERATE",
-          "approved": true,
-          "concerns": [
-            "Concentration 44.3% > 20% limit"
-          ],
-          "adjustments": {
-            "reduced_quantity": 90
-          }
-        },
-        {
-          "stage": "fund_manager",
-          "timestamp": "2026-04-12T20:02:32.932589",
-          "action": "BUY",
-          "quantity": 90,
-          "rationale": "Approved (risk=MODERATE). Strong financial position, bullish technical indicators, and favorable news environment support a buy signal"
-        },
-        {
-          "stage": "human_gate",
-          "timestamp": "2026-04-12T20:02:32.933010",
-          "approved": true
-        },
-        {
-          "stage": "execute",
-          "timestamp": "2026-04-12T20:02:32.933648",
-          "outcome": "EXECUTED: BUY 90 \u00d7 AAPL @ $221.56 = $19,940.40"
+          "timestamp": "2026-04-26T14:45:25.154097",
+          "action": "HOLD",
+          "quantity": 0,
+          "rationale": "Debate: HOLD (conf=0.44). No position change."
         }
       ]
     },
-    "GOOGL": {
-      "outcome": "EXECUTED: BUY 40 \u00d7 GOOGL @ $184.08 = $7,363.20",
+    "ADBE": {
+      "outcome": "EXECUTED: BUY 20 \u00d7 ADBE @ $584.18 = $11,683.60",
       "stages": [
         {
           "stage": "analysts",
-          "timestamp": "2026-04-12T20:02:37.336329",
+          "timestamp": "2026-04-26T14:45:25.154750",
           "results": {
             "Fundamental": {
               "signal": "BUY",
-              "confidence": 0.8,
-              "summary": "Google's strong financials, including a high profit margin of 29.2% and significant revenue growth of 13.9%, support a p"
+              "confidence": 0.67,
+              "summary": "ADBE: PE=44.5, Growth=11.2%, Margin=35.4%, ROE=36.8%"
             },
             "Technical": {
-              "signal": "BUY",
-              "confidence": 0.8,
-              "summary": "The technical indicators for GOOGL are currently showing a bullish trend. The stock price is above the 10-day simple mov"
+              "signal": "HOLD",
+              "confidence": 0.4,
+              "summary": "ADBE: RSI=98.88, MACD=BULLISH, Trend=UPTREND"
             },
             "Sentiment": {
-              "signal": "BUY",
-              "confidence": 0.6,
-              "summary": "GOOGL social sentiment: BULLISH (score=0.454), volume=3310, trending=True"
+              "signal": "HOLD",
+              "confidence": 0.49,
+              "summary": "ADBE social sentiment: NEUTRAL (score=-0.192), volume=3269, trending=True"
             },
             "News": {
-              "signal": "HOLD",
-              "confidence": 0.54,
-              "summary": "GOOGL news: avg_sentiment=0.350, 4 articles. Macro: Fed holding rates; inflation cooling; tech sector resilient"
+              "signal": "BUY",
+              "confidence": 0.58,
+              "summary": "ADBE news: avg_sentiment=0.412, 4 articles. Macro: Fed holding rates; inflation cooling; tech sector resilient"
             }
           }
         },
         {
           "stage": "debate",
-          "timestamp": "2026-04-12T20:03:04.062683",
+          "timestamp": "2026-04-26T14:45:25.155063",
           "view": "BUY",
-          "confidence": 0.72,
-          "summary": "The prevailing view on GOOGL is to buy, driven by strong financials, bullish technical indicators, and positive social sentiment. Google's high profit margin of 29.2% and significant revenue growth of 13.9% support a positive outlook, while the stock's position above the 10-day simple moving average and a strong RSI reinforce the bullish trend. Although the bearish argument raises valid points about potential overvaluation and market fluctuations, the overall resilience of the tech sector and GOOGL's adaptability mitigate these risks. With a confidence level of 0.72, the buy signal is supported by the convergence of positive fundamental, technical, and sentiment analyses, making GOOGL an attractive investment opportunity."
+          "confidence": 0.49,
+          "summary": "Weighted analyst score: 0.31. Bullish: 2/4, Bearish: 0/4."
         },
         {
           "stage": "trader",
-          "timestamp": "2026-04-12T20:03:06.412533",
+          "timestamp": "2026-04-26T14:45:25.155256",
           "action": "BUY",
-          "quantity": 40,
-          "rationale": "Strong financials, bullish technical indicators, and positive social sentiment support a buy signal, with a confidence level of 0.72 and consensus among analyst signals"
+          "quantity": 20,
+          "rationale": "Debate: BUY (conf=0.49). Allocating ~15% of cash."
         },
         {
           "stage": "risk",
-          "timestamp": "2026-04-12T20:03:06.413965",
-          "risk_level": "LOW",
+          "timestamp": "2026-04-26T14:45:25.155503",
+          "risk_level": "MODERATE",
           "approved": true,
-          "concerns": [],
+          "concerns": [
+            "Low confidence (0.49)"
+          ],
           "adjustments": {}
         },
         {
           "stage": "fund_manager",
-          "timestamp": "2026-04-12T20:03:06.414405",
+          "timestamp": "2026-04-26T14:45:25.155599",
           "action": "BUY",
-          "quantity": 40,
-          "rationale": "Approved (risk=LOW). Strong financials, bullish technical indicators, and positive social sentiment support a buy signal, with a confidence level of 0.72 and consensus among analyst signals"
+          "quantity": 20,
+          "rationale": "Approved (risk=MODERATE). Debate: BUY (conf=0.49). Allocating ~15% of cash."
         },
         {
           "stage": "human_gate",
-          "timestamp": "2026-04-12T20:03:06.414754",
+          "timestamp": "2026-04-26T14:45:25.155801",
           "approved": true
         },
         {
           "stage": "execute",
-          "timestamp": "2026-04-12T20:03:06.415222",
-          "outcome": "EXECUTED: BUY 40 \u00d7 GOOGL @ $184.08 = $7,363.20"
+          "timestamp": "2026-04-26T14:45:25.155966",
+          "outcome": "EXECUTED: BUY 20 \u00d7 ADBE @ $584.18 = $11,683.60"
         }
       ]
     },
     "MSFT": {
-      "outcome": "EXECUTED: BUY 30 \u00d7 MSFT @ $484.62 = $14,538.60",
+      "outcome": "EXECUTED: BUY 21 \u00d7 MSFT @ $484.62 = $10,177.02",
       "stages": [
         {
           "stage": "analysts",
-          "timestamp": "2026-04-12T20:03:11.640561",
+          "timestamp": "2026-04-26T14:45:25.156489",
           "results": {
             "Fundamental": {
               "signal": "BUY",
-              "confidence": 0.8,
-              "summary": "Microsoft (MSFT) presents a compelling investment opportunity, driven by its strong financials, stable growth prospects,"
+              "confidence": 0.75,
+              "summary": "MSFT: PE=35.2, Growth=16.2%, Margin=35.6%, ROE=38.9%"
             },
             "Technical": {
-              "signal": "STRONG_BUY",
-              "confidence": 0.9,
-              "summary": "Microsoft's technical indicators are overwhelmingly bullish, with the stock price above its 10-day SMA and the MACD line"
+              "signal": "HOLD",
+              "confidence": 0.4,
+              "summary": "MSFT: RSI=90.31, MACD=BULLISH, Trend=UPTREND"
             },
             "Sentiment": {
               "signal": "BUY",
@@ -182,21 +156,21 @@
         },
         {
           "stage": "debate",
-          "timestamp": "2026-04-12T20:03:37.752643",
+          "timestamp": "2026-04-26T14:45:25.156724",
           "view": "BUY",
-          "confidence": 0.73,
-          "summary": "The prevailing view on Microsoft (MSFT) is a buy, driven by its strong financials, stable growth prospects, and dominant position in the technology sector. The company's high profit margin and revenue growth, combined with its bullish technical indicators and positive sentiment and news analysis, support a bullish outlook. Although the bear's concerns about valuation, product reliance, and competition are valid, they are outweighed by the company's strengths and growth potential. With a reasonable forward valuation and a resilient tech sector, MSFT is well-positioned for long-term growth and returns, making it an attractive investment opportunity."
+          "confidence": 0.54,
+          "summary": "Weighted analyst score: 0.46. Bullish: 3/4, Bearish: 0/4."
         },
         {
           "stage": "trader",
-          "timestamp": "2026-04-12T20:03:40.239324",
+          "timestamp": "2026-04-26T14:45:25.156878",
           "action": "BUY",
-          "quantity": 30,
-          "rationale": "Strong financials, stable growth prospects, and dominant position in the technology sector, supported by bullish technical indicators and positive sentiment analysis"
+          "quantity": 21,
+          "rationale": "Debate: BUY (conf=0.54). Allocating ~15% of cash."
         },
         {
           "stage": "risk",
-          "timestamp": "2026-04-12T20:03:40.240818",
+          "timestamp": "2026-04-26T14:45:25.157195",
           "risk_level": "LOW",
           "approved": true,
           "concerns": [],
@@ -204,89 +178,71 @@
         },
         {
           "stage": "fund_manager",
-          "timestamp": "2026-04-12T20:03:40.241233",
+          "timestamp": "2026-04-26T14:45:25.157353",
           "action": "BUY",
-          "quantity": 30,
-          "rationale": "Approved (risk=LOW). Strong financials, stable growth prospects, and dominant position in the technology sector, supported by bullish technical indicators and positive sentiment analysis"
+          "quantity": 21,
+          "rationale": "Approved (risk=LOW). Debate: BUY (conf=0.54). Allocating ~15% of cash."
         },
         {
           "stage": "human_gate",
-          "timestamp": "2026-04-12T20:03:40.241601",
+          "timestamp": "2026-04-26T14:45:25.157471",
           "approved": true
         },
         {
           "stage": "execute",
-          "timestamp": "2026-04-12T20:03:40.242081",
-          "outcome": "EXECUTED: BUY 30 \u00d7 MSFT @ $484.62 = $14,538.60"
+          "timestamp": "2026-04-26T14:45:25.157626",
+          "outcome": "EXECUTED: BUY 21 \u00d7 MSFT @ $484.62 = $10,177.02"
         }
       ]
     }
   },
   "portfolio": {
     "total_value": 100000.0,
-    "cash": 58157.8,
-    "cash_pct": 58.16,
-    "invested": 41842.2,
+    "cash": 78139.38,
+    "cash_pct": 78.14,
+    "invested": 21860.62,
     "total_pnl": 0.0,
     "positions": {
-      "AAPL": {
-        "shares": 90,
-        "avg_cost": 221.56,
-        "price": 221.56,
-        "market_value": 19940.4,
-        "weight_pct": 19.94,
-        "pnl": 0.0,
-        "pnl_pct": 0.0
-      },
-      "GOOGL": {
-        "shares": 40,
-        "avg_cost": 184.08,
-        "price": 184.08,
-        "market_value": 7363.2,
-        "weight_pct": 7.36,
+      "ADBE": {
+        "shares": 20,
+        "avg_cost": 584.18,
+        "price": 584.18,
+        "market_value": 11683.6,
+        "weight_pct": 11.68,
         "pnl": 0.0,
         "pnl_pct": 0.0
       },
       "MSFT": {
-        "shares": 30,
+        "shares": 21,
         "avg_cost": 484.62,
         "price": 484.62,
-        "market_value": 14538.6,
-        "weight_pct": 14.54,
+        "market_value": 10177.02,
+        "weight_pct": 10.18,
         "pnl": 0.0,
         "pnl_pct": 0.0
       }
     },
-    "num_positions": 3,
-    "max_concentration": 19.94
+    "num_positions": 2,
+    "max_concentration": 11.68
   },
   "transactions": [
     {
-      "timestamp": "2026-04-12T20:02:32.933605",
-      "ticker": "AAPL",
+      "timestamp": "2026-04-26T14:45:25.155956",
+      "ticker": "ADBE",
       "action": "BUY",
-      "quantity": 90,
-      "price": 221.56,
-      "total": 19940.4,
-      "cash_after": 80059.6
+      "quantity": 20,
+      "price": 584.18,
+      "total": 11683.6,
+      "cash_after": 88316.4
     },
     {
-      "timestamp": "2026-04-12T20:03:06.415189",
-      "ticker": "GOOGL",
-      "action": "BUY",
-      "quantity": 40,
-      "price": 184.08,
-      "total": 7363.2,
-      "cash_after": 72696.4
-    },
-    {
-      "timestamp": "2026-04-12T20:03:40.242049",
+      "timestamp": "2026-04-26T14:45:25.157616",
       "ticker": "MSFT",
       "action": "BUY",
-      "quantity": 30,
+      "quantity": 21,
       "price": 484.62,
-      "total": 14538.6,
-      "cash_after": 58157.8
+      "total": 10177.02,
+      "cash_after": 78139.38
     }
   ]
 }

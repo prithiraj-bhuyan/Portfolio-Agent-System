@@ -1,13 +1,14 @@
 # AI-Powered Agentic Portfolio Management System
 
-**Phase 2: Architecture, Prototype, and Evaluation Plan**  
-Track A: Technical Build | CMU Agentic Systems Studio — Spring 2026
+**Phase 3: Final Product, Evidence, and Reflection**  
+Track A: Technical Build | CMU Agentic Systems Studio — Spring 2026  
+Team: Raj Bhuyan, Sanath Mahesh Kumar, Mahir Nagersheth
 
 ---
 
 ## Overview
 
-A multi-agent portfolio management system that autonomously analyzes stocks and constructs diversified portfolios with human-in-the-loop approval for every trade. Inspired by the [TradingAgents](https://github.com/TauricResearch/TradingAgents) framework.
+A multi-agent portfolio management system that autonomously analyzes stocks and constructs diversified portfolios with human-in-the-loop approval for every trade. Inspired by the [TradingAgents](https://github.com/TauricResearch/TradingAgents) framework (see [inherited vs. original boundary](docs/inherited_vs_original.md)).
 
 **Architecture:** Two layers, 13 agents, 7-stage pipeline built with **LangGraph** and **Groq** (llama-3.3-70b-versatile, free tier).
 
@@ -22,18 +23,40 @@ source my-env/bin/activate   # macOS/Linux
 # Install dependencies
 pip install -r requirements.txt
 
-# (Optional) Enable LLM-powered analysis
-# Create a .env file in the project root:
+# Set up environment (create .env in project root)
 echo 'GROQ_API_KEY=gsk_your_key_here' > .env
+echo 'DATA_MODE=mock' >> .env       # mock | live
 
-# Run the prototype
+# Run the CLI pipeline
 python orchestrator.py
 
-# Run evaluation (7 test scenarios)
+# Launch the Streamlit dashboard
+streamlit run dashboard.py
+
+# Run evaluation (10 experimental scenarios)
 python evaluation/eval_runner.py
+
+# Run CLASSic evaluation framework
+python evaluation/classic_evaluator.py
+
+# Run historical backtest (3 stress periods)
+python backtest.py
+
+# Generate evidence package
+python evaluation/evidence_package.py
 ```
 
-The API key is loaded automatically from the `.env` file via `python-dotenv`. The system runs with deterministic mock data if no API key is set.
+## Streamlit Dashboard
+
+The interactive dashboard provides 5 tabs:
+
+| Tab | Description |
+|-----|-------------|
+| 📊 Portfolio Overview | Holdings, P&L, allocation chart, cash trajectory |
+| 🤖 Agent Reasoning | Expandable trace of each agent's analysis per ticker |
+| 📋 Transaction Log | All executed trades with full interaction trace |
+| 👤 Human Approval Gate | Interactive approve/reject for pending trades |
+| 📈 CLASSic Report | Cost, latency, token usage, and accuracy metrics |
 
 ## Architecture
 
@@ -60,53 +83,96 @@ Conditional edges:
 ## File Structure
 
 ```
-├── models.py              # Data models, enums, GlobalState
-├── tools.py               # 5 tool interfaces
-├── llm_interface.py       # Groq LLM wrapper with fallback
-├── agents.py              # All 13 agent definitions
-├── orchestrator.py        # LangGraph pipeline + CLI
+├── orchestrator.py            # LangGraph pipeline + CLI
+├── agents.py                  # All 13 agent definitions
+├── models.py                  # Data models, enums, GlobalState
+├── tools.py                   # 5 tool interfaces (mock + live)
+├── llm_interface.py           # Groq LLM wrapper with cost/latency tracking
+├── dashboard.py               # Streamlit interactive dashboard
+├── backtest.py                # Historical backtest engine (3 periods)
+├── persistence.py             # SQLite state persistence
 ├── requirements.txt
+├── .env                       # API keys + DATA_MODE (gitignored)
+│
 ├── evaluation/
-│   └── eval_runner.py     # 7 test scenarios
+│   ├── eval_runner.py         # 10 experimental test scenarios
+│   ├── classic_evaluator.py   # CLASSic framework (all 6 elements)
+│   ├── evidence_package.py    # Evidence collection automation
+│   ├── test_results.json      # Latest eval results
+│   └── evidence/              # Generated evidence package
+│       ├── test_scenarios.json
+│       ├── failure_cases.json
+│       ├── classic_report.json
+│       ├── backtest_results.json
+│       ├── eval_traces.json
+│       ├── manifest.json
+│       └── before_after_traces/
+│
 ├── sample_runs/
 │   ├── interaction_trace.json
-│   └── cycle_results.json
+│   ├── cycle_results.json
+│   └── llm_metrics.json
+│
 └── docs/
-    ├── Phase2_Deliverable.docx
-    ├── architecture.mermaid
-    └── generate_docx.js
+    ├── final_report.md        # 12-15 page final report
+    ├── ai_usage_disclosure.md # AI usage disclosure (course policy)
+    ├── inherited_vs_original.md # What's adapted vs. original
+    ├── contribution_update.md  # Phase 3 ownership split
+    ├── video_script.md        # 5-minute video script
+    ├── Architecture Diagram.png
+    └── Phase2_Deliverable_final.pdf
 ```
 
-## Sample Output
+## Evaluation
 
-```
-PIPELINE: ADBE
-  [Fundamental ] BUY     conf=0.75
-  [Technical   ] BUY     conf=0.52
-  [Sentiment   ] BUY     conf=0.60
-  [News        ] HOLD    conf=0.54
-  Debate: BUY  conf=0.54
-  Trader: BUY 22 shares
-  Risk: LOW  Approved
-  Human: ✓ APPROVED
-  → EXECUTED: BUY 22 × ADBE @ $548.62 = $12,069.64
-```
+### Experimental Scenarios (10 tests)
 
-## Evaluation Results
+| # | Scenario | Type | Description |
+|---|----------|------|-------------|
+| 1 | Consensus BUY | Normal | All analysts agree, trade executes |
+| 2 | Consensus SELL | Normal | Existing position, bearish signals |
+| 3 | Analyst Disagreement | Adversarial | Fund vs. tech conflict, debate arbitrates |
+| 4 | News vs Fundamentals | Adversarial | Strong financials + negative news |
+| 5 | Sentiment vs PE Risk | Adversarial | Extreme bullish sentiment + high valuation |
+| 6 | Concentration Rejection | Failure | Risk team blocks >20% position |
+| 7 | Insufficient Cash | Failure | $500 cash, can't afford stock |
+| 8 | LLM Fallback | Failure | LLM disabled, rule-based degradation |
+| 9 | Multi-ticker Portfolio | Normal | 3-ticker diversification |
+| 10 | Trace Completeness | Normal | All 9 agent types in audit trail |
 
-| # | Scenario | Category | Status |
-|---|----------|----------|--------|
-| 1 | Strong consensus BUY | End-to-end | ✓ PASS |
-| 2 | Mixed signals → HOLD | Coordination | ✓ PASS |
-| 3 | Concentration limit | Risk mgmt | ✓ PASS |
-| 4 | Insufficient cash | Error handling | ✓ PASS |
-| 5 | Multi-ticker portfolio | Portfolio mgmt | ✓ PASS |
-| 6 | Trace completeness | Observability | ✓ PASS |
-| 7 | Existing position | End-to-end | ✓ PASS |
+### Historical Backtest (3 periods)
+
+| Period | Dates | Stress Event |
+|--------|-------|-------------|
+| COVID Drawdown | Feb–Apr 2020 | WHO pandemic declaration |
+| Rate-Hike Volatility | Nov 2021–Jun 2022 | Fed tapering + rate hike |
+| SVB Stress | Jan–Mar 2023 | SVB failure |
+
+### CLASSic Evaluation Framework
+
+| Element | Implementation |
+|---------|---------------|
+| Success Criteria | 5 measurable pass/fail thresholds |
+| Eval Dataset | 20 labeled traces across 5 categories |
+| Code Evaluators | Tool correctness, state consistency, concentration |
+| LLM Judge | Reasoning quality scoring (1-5 scale) |
+| CLASSic Report | Cost, Latency, Accuracy, Security, Severity |
+| Manual Review | Template for 10-15 trace reviews |
 
 ## Technology Stack
 
 - **Orchestration:** LangGraph StateGraph
 - **LLM:** Groq API (llama-3.3-70b-versatile, free) with rule-based fallbacks
 - **Market Data:** yfinance (live) or deterministic mocks
+- **News:** Finnhub API (live) or curated mocks
+- **Dashboard:** Streamlit + Plotly
+- **Persistence:** SQLite
 - **Language:** Python 3.11+
+
+## Documentation
+
+- [Final Report](docs/final_report.md)
+- [AI Usage Disclosure](docs/ai_usage_disclosure.md)
+- [Inherited vs. Original Boundary](docs/inherited_vs_original.md)
+- [Contribution Update](docs/contribution_update.md)
+- [Video Script](docs/video_script.md)

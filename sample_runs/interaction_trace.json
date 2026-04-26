@@ -1,26 +1,26 @@
 [
   {
-    "timestamp": "2026-04-12T20:02:21.069232",
+    "timestamp": "2026-04-26T14:45:25.153353",
     "agent": "fundamental",
     "action": "REPORT",
     "details": {
       "ticker": "AAPL",
-      "signal": "BUY",
-      "confidence": 0.8
+      "signal": "HOLD",
+      "confidence": 0.59
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:22.179690",
+    "timestamp": "2026-04-26T14:45:25.153471",
     "agent": "technical",
     "action": "REPORT",
     "details": {
       "ticker": "AAPL",
-      "signal": "STRONG_BUY",
-      "confidence": 0.9
+      "signal": "HOLD",
+      "confidence": 0.4
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:22.179955",
+    "timestamp": "2026-04-26T14:45:25.153493",
     "agent": "sentiment",
     "action": "REPORT",
     "details": {
@@ -30,7 +30,7 @@
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:22.180034",
+    "timestamp": "2026-04-26T14:45:25.153505",
     "agent": "news",
     "action": "REPORT",
     "details": {
@@ -40,173 +40,139 @@
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:29.450167",
+    "timestamp": "2026-04-26T14:45:25.153827",
     "agent": "ResearchTeam",
     "action": "DEBATE",
     "details": {
       "ticker": "AAPL",
-      "view": "BUY"
+      "view": "HOLD"
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:32.930504",
+    "timestamp": "2026-04-26T14:45:25.154087",
     "agent": "Trader",
     "action": "PROPOSAL",
     "details": {
       "ticker": "AAPL",
-      "action": "BUY",
-      "qty": 200
+      "action": "HOLD",
+      "qty": 0
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:32.932077",
+    "timestamp": "2026-04-26T14:45:25.154595",
+    "agent": "fundamental",
+    "action": "REPORT",
+    "details": {
+      "ticker": "ADBE",
+      "signal": "BUY",
+      "confidence": 0.67
+    }
+  },
+  {
+    "timestamp": "2026-04-26T14:45:25.154692",
+    "agent": "technical",
+    "action": "REPORT",
+    "details": {
+      "ticker": "ADBE",
+      "signal": "HOLD",
+      "confidence": 0.4
+    }
+  },
+  {
+    "timestamp": "2026-04-26T14:45:25.154727",
+    "agent": "sentiment",
+    "action": "REPORT",
+    "details": {
+      "ticker": "ADBE",
+      "signal": "HOLD",
+      "confidence": 0.49
+    }
+  },
+  {
+    "timestamp": "2026-04-26T14:45:25.154745",
+    "agent": "news",
+    "action": "REPORT",
+    "details": {
+      "ticker": "ADBE",
+      "signal": "BUY",
+      "confidence": 0.58
+    }
+  },
+  {
+    "timestamp": "2026-04-26T14:45:25.155057",
+    "agent": "ResearchTeam",
+    "action": "DEBATE",
+    "details": {
+      "ticker": "ADBE",
+      "view": "BUY"
+    }
+  },
+  {
+    "timestamp": "2026-04-26T14:45:25.155250",
+    "agent": "Trader",
+    "action": "PROPOSAL",
+    "details": {
+      "ticker": "ADBE",
+      "action": "BUY",
+      "qty": 20
+    }
+  },
+  {
+    "timestamp": "2026-04-26T14:45:25.155496",
     "agent": "RiskTeam",
     "action": "ASSESSMENT",
     "details": {
-      "ticker": "AAPL",
+      "ticker": "ADBE",
       "approved": true,
       "level": "MODERATE"
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:32.932560",
+    "timestamp": "2026-04-26T14:45:25.155594",
     "agent": "FundManager",
     "action": "DECISION",
     "details": {
-      "ticker": "AAPL",
+      "ticker": "ADBE",
       "action": "BUY",
-      "qty": 90
+      "qty": 20
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:32.933613",
+    "timestamp": "2026-04-26T14:45:25.155958",
     "agent": "Execution",
     "action": "TRADE",
     "details": {
-      "timestamp": "2026-04-12T20:02:32.933605",
-      "ticker": "AAPL",
+      "timestamp": "2026-04-26T14:45:25.155956",
+      "ticker": "ADBE",
       "action": "BUY",
-      "quantity": 90,
-      "price": 221.56,
-      "total": 19940.4,
-      "cash_after": 80059.6
+      "quantity": 20,
+      "price": 584.18,
+      "total": 11683.6,
+      "cash_after": 88316.4
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:33.844549",
+    "timestamp": "2026-04-26T14:45:25.156367",
     "agent": "fundamental",
     "action": "REPORT",
     "details": {
-      "ticker": "GOOGL",
+      "ticker": "MSFT",
       "signal": "BUY",
-      "confidence": 0.8
+      "confidence": 0.75
     }
   },
   {
-    "timestamp": "2026-04-12T20:02:37.335945",
+    "timestamp": "2026-04-26T14:45:25.156460",
     "agent": "technical",
     "action": "REPORT",
     "details": {
-      "ticker": "GOOGL",
-      "signal": "BUY",
-      "confidence": 0.8
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:02:37.336226",
-    "agent": "sentiment",
-    "action": "REPORT",
-    "details": {
-      "ticker": "GOOGL",
-      "signal": "BUY",
-      "confidence": 0.6
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:02:37.336306",
-    "agent": "news",
-    "action": "REPORT",
-    "details": {
-      "ticker": "GOOGL",
+      "ticker": "MSFT",
       "signal": "HOLD",
-      "confidence": 0.54
+      "confidence": 0.4
     }
   },
   {
-    "timestamp": "2026-04-12T20:03:04.062582",
-    "agent": "ResearchTeam",
-    "action": "DEBATE",
-    "details": {
-      "ticker": "GOOGL",
-      "view": "BUY"
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:03:06.412436",
-    "agent": "Trader",
-    "action": "PROPOSAL",
-    "details": {
-      "ticker": "GOOGL",
-      "action": "BUY",
-      "qty": 40
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:03:06.413932",
-    "agent": "RiskTeam",
-    "action": "ASSESSMENT",
-    "details": {
-      "ticker": "GOOGL",
-      "approved": true,
-      "level": "LOW"
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:03:06.414386",
-    "agent": "FundManager",
-    "action": "DECISION",
-    "details": {
-      "ticker": "GOOGL",
-      "action": "BUY",
-      "qty": 40
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:03:06.415197",
-    "agent": "Execution",
-    "action": "TRADE",
-    "details": {
-      "timestamp": "2026-04-12T20:03:06.415189",
-      "ticker": "GOOGL",
-      "action": "BUY",
-      "quantity": 40,
-      "price": 184.08,
-      "total": 7363.2,
-      "cash_after": 72696.4
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:03:09.588707",
-    "agent": "fundamental",
-    "action": "REPORT",
-    "details": {
-      "ticker": "MSFT",
-      "signal": "BUY",
-      "confidence": 0.8
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:03:11.640199",
-    "agent": "technical",
-    "action": "REPORT",
-    "details": {
-      "ticker": "MSFT",
-      "signal": "STRONG_BUY",
-      "confidence": 0.9
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:03:11.640463",
+    "timestamp": "2026-04-26T14:45:25.156478",
     "agent": "sentiment",
     "action": "REPORT",
     "details": {
@@ -216,7 +182,7 @@
     }
   },
   {
-    "timestamp": "2026-04-12T20:03:11.640543",
+    "timestamp": "2026-04-26T14:45:25.156487",
     "agent": "news",
     "action": "REPORT",
     "details": {
@@ -226,7 +192,7 @@
     }
   },
   {
-    "timestamp": "2026-04-12T20:03:37.752554",
+    "timestamp": "2026-04-26T14:45:25.156720",
     "agent": "ResearchTeam",
     "action": "DEBATE",
     "details": {
@@ -235,17 +201,17 @@
     }
   },
   {
-    "timestamp": "2026-04-12T20:03:40.239200",
+    "timestamp": "2026-04-26T14:45:25.156868",
     "agent": "Trader",
     "action": "PROPOSAL",
     "details": {
       "ticker": "MSFT",
       "action": "BUY",
-      "qty": 30
+      "qty": 21
     }
   },
   {
-    "timestamp": "2026-04-12T20:03:40.240783",
+    "timestamp": "2026-04-26T14:45:25.157189",
     "agent": "RiskTeam",
     "action": "ASSESSMENT",
     "details": {
@@ -255,27 +221,27 @@
     }
   },
   {
-    "timestamp": "2026-04-12T20:03:40.241214",
+    "timestamp": "2026-04-26T14:45:25.157344",
     "agent": "FundManager",
     "action": "DECISION",
     "details": {
       "ticker": "MSFT",
       "action": "BUY",
-      "qty": 30
+      "qty": 21
     }
   },
   {
-    "timestamp": "2026-04-12T20:03:40.242055",
+    "timestamp": "2026-04-26T14:45:25.157619",
     "agent": "Execution",
     "action": "TRADE",
     "details": {
-      "timestamp": "2026-04-12T20:03:40.242049",
+      "timestamp": "2026-04-26T14:45:25.157616",
       "ticker": "MSFT",
       "action": "BUY",
-      "quantity": 30,
+      "quantity": 21,
       "price": 484.62,
-      "total": 14538.6,
-      "cash_after": 58157.8
+      "total": 10177.02,
+      "cash_after": 78139.38
     }
   }
 ]

@@ -1,0 +1,118 @@
+{
+  "total_failure_cases": 3,
+  "cases": [
+    {
+      "case_id": 6,
+      "name": "FAILURE: Risk team blocks over-concentrated position",
+      "category": "risk-management",
+      "test_type": "failure",
+      "status": "PASS \u2713",
+      "passed": true,
+      "expected": "Concentration \u2264 20% enforced by risk team",
+      "actual": "Concentration: 18.5%, Adjusted: True",
+      "before_state": {
+        "cash": 50000,
+        "holdings": {},
+        "num_transactions": 0,
+        "num_trace_entries": 0
+      },
+      "after_state": {
+        "cash": 40758.3,
+        "holdings": {
+          "NVDA": 10
+        },
+        "num_transactions": 1,
+        "num_trace_entries": 9
+      },
+      "measurable_criteria": {
+        "concentration_within_limit": true,
+        "risk_adjustment_applied": true,
+        "final_concentration_pct": 18.48
+      },
+      "details": {
+        "position_value": 9241.7,
+        "total_value": 50000.0,
+        "risk_concerns": [
+          "Concentration 46.2% > 20% limit"
+        ]
+      }
+    },
+    {
+      "case_id": 7,
+      "name": "FAILURE: Insufficient cash blocks expensive trade",
+      "category": "error-handling",
+      "test_type": "failure",
+      "status": "PASS \u2713",
+      "passed": true,
+      "expected": "Trade blocked \u2014 insufficient cash. Cash \u2265 0.",
+      "actual": "REJECTED by fund manager",
+      "before_state": {
+        "cash": 500,
+        "holdings": {},
+        "num_transactions": 0,
+        "num_trace_entries": 0
+      },
+      "after_state": {
+        "cash": 500,
+        "holdings": {},
+        "num_transactions": 0,
+        "num_trace_entries": 8
+      },
+      "measurable_criteria": {
+        "trade_blocked": true,
+        "cash_non_negative": true,
+        "cash_preserved": true
+      },
+      "details": {
+        "starting_cash": 500,
+        "ending_cash": 500
+      }
+    },
+    {
+      "case_id": 8,
+      "name": "FAILURE: LLM unavailable \u2192 graceful rule-based fallback",
+      "category": "error-handling",
+      "test_type": "failure",
+      "status": "PASS \u2713",
+      "passed": true,
+      "expected": "Pipeline completes with rule-based fallback (no LLM)",
+      "actual": "EXECUTED: BUY 20 \u00d7 ADBE @ $584.18 = $11,683.60",
+      "before_state": {
+        "cash": 100000,
+        "holdings": {},
+        "num_transactions": 0,
+        "num_trace_entries": 0
+      },
+      "after_state": {
+        "cash": 88316.4,
+        "holdings": {
+          "ADBE": 20
+        },
+        "num_transactions": 1,
+        "num_trace_entries": 9
+      },
+      "measurable_criteria": {
+        "pipeline_completed": true,
+        "no_crash": true,
+        "llm_calls_skipped": 8,
+        "fallback_used": true
+      },
+      "details": {
+        "stages_completed": 7,
+        "outcome": "EXECUTED: BUY 20 \u00d7 ADBE @ $584.18 = $11,683.60"
+      }
+    }
+  ],
+  "analysis": {
+    "common_themes": [
+      "Rule-based fallback ensures system availability",
+      "Risk team enforces hard limits (20% concentration)",
+      "Insufficient cash correctly blocks trades"
+    ],
+    "what_changed_after_testing": [
+      "Added structured LLM fallback logging to track degradation",
+      "Risk team now logs adjustment rationale in trace",
+      "Error handling preserves state consistency"
+    ]
+  }
+}

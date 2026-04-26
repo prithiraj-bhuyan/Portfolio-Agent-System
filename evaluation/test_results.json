@@ -1,40 +1,116 @@
 [
   {
     "case_id": 1,
-    "name": "Happy Path: Strong consensus BUY",
+    "name": "Consensus BUY: All analysts agree bullish",
     "category": "end-to-end",
+    "test_type": "normal",
     "status": "PASS \u2713",
     "passed": true,
-    "expected": "Trade executed for ADBE",
+    "expected": "Trade executed for ADBE with position created",
     "actual": "EXECUTED: BUY 34 \u00d7 ADBE @ $584.18 = $19,862.12",
+    "before_state": {
+      "cash": 100000,
+      "holdings": {},
+      "num_transactions": 0,
+      "num_trace_entries": 0
+    },
+    "after_state": {
+      "cash": 80137.88,
+      "holdings": {
+        "ADBE": 34
+      },
+      "num_transactions": 1,
+      "num_trace_entries": 9
+    },
+    "measurable_criteria": {
+      "trade_executed": true,
+      "position_created": true,
+      "cash_decreased": true
+    },
     "details": {
       "holdings": {
         "ADBE": 34
       },
       "cash": 80137.88,
-      "stages_completed": 7
+      "stages_completed": 7,
+      "llm_calls": 8
     }
   },
   {
     "case_id": 2,
-    "name": "Mixed Signals: Analysts disagree \u2192 HOLD",
+    "name": "Consensus SELL: Bearish signals on held position",
+    "category": "end-to-end",
+    "test_type": "normal",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Pipeline handles existing position with loss gracefully",
+    "actual": "EXECUTED: BUY 50 \u00d7 AAPL @ $221.56 = $11,078.00",
+    "before_state": {
+      "cash": 50000,
+      "holdings": {
+        "AAPL": 100
+      },
+      "num_transactions": 0,
+      "num_trace_entries": 0
+    },
+    "after_state": {
+      "cash": 38922.0,
+      "holdings": {
+        "AAPL": 150
+      },
+      "num_transactions": 1,
+      "num_trace_entries": 9
+    },
+    "measurable_criteria": {
+      "pipeline_completed": true,
+      "stages_run": 7
+    },
+    "details": {
+      "initial_position": {
+        "shares": 100,
+        "avg_cost": 243.72
+      },
+      "outcome": "EXECUTED: BUY 50 \u00d7 AAPL @ $221.56 = $11,078.00"
+    }
+  },
+  {
+    "case_id": 3,
+    "name": "Analyst Disagreement: Fundamentals vs Technicals conflict",
     "category": "coordination",
-    "status": "FAIL \u2717",
-    "passed": false,
-    "expected": "HOLD \u2014 no trade when signals conflict",
-    "actual": "EXECUTED: BUY 90 \u00d7 AAPL @ $221.56 = $19,940.40",
+    "test_type": "adversarial",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Debate confidence < 0.85 showing uncertainty recognition",
+    "actual": "Debate view: BUY, confidence: 0.70",
+    "before_state": {
+      "cash": 100000,
+      "holdings": {}
+    },
+    "after_state": {
+      "cash": 80059.6,
+      "holdings": {
+        "AAPL": 90
+      },
+      "num_transactions": 1,
+      "num_trace_entries": 9
+    },
+    "measurable_criteria": {
+      "debate_occurred": true,
+      "uncertainty_recognized": true,
+      "debate_confidence": 0.7
+    },
     "details": {
       "analyst_signals": [
         {
           "Fundamental": {
             "signal": "BUY",
             "confidence": 0.8,
-            "summary": "Apple Inc. (AAPL) exhibits a strong financial position with a high profit margin of 26.4% and a reasonable debt-to-equit"
+            "summary": "AAPL's strong profit margin, moderate revenue growth, and reasonable debt-to-equity ratio indicate a healthy financial p"
           },
           "Technical": {
             "signal": "STRONG_BUY",
             "confidence": 0.9,
-            "summary": "The technical indicators for AAPL are overwhelmingly bullish, with the stock price above the 10-day SMA and the RSI indi"
+            "summary": "AAPL's technical indicators are overwhelmingly bullish, with the stock price above its 10-day SMA and the MACD line indi"
           },
           "Sentiment": {
             "signal": "HOLD",
@@ -47,61 +123,263 @@
             "summary": "AAPL news: avg_sentiment=0.412, 4 articles. Macro: Fed holding rates; inflation cooling; tech sector resilient"
           }
         }
-      ]
-    }
-  },
-  {
-    "case_id": 3,
-    "name": "Risk Gate: Concentration limit enforcement",
-    "category": "risk-management",
-    "status": "PASS \u2713",
-    "passed": true,
-    "expected": "Concentration \u2264 20%",
-    "actual": "18.5%",
-    "details": {
-      "position_value": 9241.699999999999,
-      "total_value": 50000.0
+      ],
+      "debate_view": "BUY",
+      "debate_summary": "The prevailing view on AAPL is a buy, driven by the company's strong financial position, bullish technical indicators, and positive news outlook. Although the bear argument raises valid concerns about"
     }
   },
   {
     "case_id": 4,
-    "name": "Failure: Insufficient cash blocks trade",
-    "category": "error-handling",
+    "name": "Adversarial: News contradicts fundamentals",
+    "category": "adversarial",
+    "test_type": "adversarial",
     "status": "PASS \u2713",
     "passed": true,
-    "expected": "Trade blocked \u2014 insufficient cash",
+    "expected": "Debate surfaces tension between strong fundamentals and negative news",
+    "actual": "Fundamental=BUY, News=HOLD, Debate=BUY",
+    "before_state": {
+      "cash": 100000,
+      "holdings": {}
+    },
+    "after_state": {
+      "cash": 80592.43,
+      "holdings": {
+        "NVDA": 21
+      },
+      "num_transactions": 1,
+      "num_trace_entries": 9
+    },
+    "measurable_criteria": {
+      "signal_tension_exists": true,
+      "debate_occurred": true
+    },
+    "details": {
+      "fundamental_signal": "BUY",
+      "news_signal": "HOLD",
+      "debate_view": "BUY",
+      "debate_confidence": 0.73
+    }
+  },
+  {
+    "case_id": 5,
+    "name": "Adversarial: Extreme bullish sentiment + high PE risk",
+    "category": "adversarial",
+    "test_type": "adversarial",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Risk team evaluates high-PE, high-price position",
+    "actual": "Risk: MODERATE, Concerns: ['Concentration 46.2% > 20% limit']",
+    "before_state": {
+      "cash": 100000,
+      "holdings": {}
+    },
+    "after_state": {
+      "cash": 80592.43,
+      "holdings": {
+        "NVDA": 21
+      },
+      "num_transactions": 1,
+      "num_trace_entries": 9
+    },
+    "measurable_criteria": {
+      "risk_assessment_ran": true,
+      "concerns_raised": true,
+      "num_concerns": 1
+    },
+    "details": {
+      "risk_level": "MODERATE",
+      "concerns": [
+        "Concentration 46.2% > 20% limit"
+      ],
+      "adjustments": {
+        "reduced_quantity": 21
+      }
+    }
+  },
+  {
+    "case_id": 6,
+    "name": "FAILURE: Risk team blocks over-concentrated position",
+    "category": "risk-management",
+    "test_type": "failure",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Concentration \u2264 20% enforced by risk team",
+    "actual": "Concentration: 18.5%, Adjusted: True",
+    "before_state": {
+      "cash": 50000,
+      "holdings": {},
+      "num_transactions": 0,
+      "num_trace_entries": 0
+    },
+    "after_state": {
+      "cash": 40758.3,
+      "holdings": {
+        "NVDA": 10
+      },
+      "num_transactions": 1,
+      "num_trace_entries": 9
+    },
+    "measurable_criteria": {
+      "concentration_within_limit": true,
+      "risk_adjustment_applied": true,
+      "final_concentration_pct": 18.48
+    },
+    "details": {
+      "position_value": 9241.7,
+      "total_value": 50000.0,
+      "risk_concerns": [
+        "Concentration 46.2% > 20% limit"
+      ]
+    }
+  },
+  {
+    "case_id": 7,
+    "name": "FAILURE: Insufficient cash blocks expensive trade",
+    "category": "error-handling",
+    "test_type": "failure",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "Trade blocked \u2014 insufficient cash. Cash \u2265 0.",
     "actual": "REJECTED by fund manager",
+    "before_state": {
+      "cash": 500,
+      "holdings": {},
+      "num_transactions": 0,
+      "num_trace_entries": 0
+    },
+    "after_state": {
+      "cash": 500,
+      "holdings": {},
+      "num_transactions": 0,
+      "num_trace_entries": 8
+    },
+    "measurable_criteria": {
+      "trade_blocked": true,
+      "cash_non_negative": true,
+      "cash_preserved": true
+    },
     "details": {
       "starting_cash": 500,
       "ending_cash": 500
     }
   },
   {
-    "case_id": 5,
-    "name": "Portfolio: Multi-ticker diversified allocation",
-    "category": "portfolio-management",
+    "case_id": 8,
+    "name": "FAILURE: LLM unavailable \u2192 graceful rule-based fallback",
+    "category": "error-handling",
+    "test_type": "failure",
     "status": "PASS \u2713",
     "passed": true,
-    "expected": "\u22651 position, cash > 0 (no over-allocation)",
-    "actual": "3 positions, $66,948.50 cash",
+    "expected": "Pipeline completes with rule-based fallback (no LLM)",
+    "actual": "EXECUTED: BUY 20 \u00d7 ADBE @ $584.18 = $11,683.60",
+    "before_state": {
+      "cash": 100000,
+      "holdings": {},
+      "num_transactions": 0,
+      "num_trace_entries": 0
+    },
+    "after_state": {
+      "cash": 88316.4,
+      "holdings": {
+        "ADBE": 20
+      },
+      "num_transactions": 1,
+      "num_trace_entries": 9
+    },
+    "measurable_criteria": {
+      "pipeline_completed": true,
+      "no_crash": true,
+      "llm_calls_skipped": 8,
+      "fallback_used": true
+    },
     "details": {
+      "stages_completed": 7,
+      "outcome": "EXECUTED: BUY 20 \u00d7 ADBE @ $584.18 = $11,683.60"
+    }
+  },
+  {
+    "case_id": 9,
+    "name": "Coordination: Multi-ticker diversified allocation",
+    "category": "coordination",
+    "test_type": "normal",
+    "status": "PASS \u2713",
+    "passed": true,
+    "expected": "\u22651 position, cash > 0, max concentration \u2264 20%",
+    "actual": "3 positions, $66,948.50 cash, max concentration 19.9%",
+    "before_state": {
+      "cash": 100000,
+      "holdings": {},
+      "num_transactions": 0,
+      "num_trace_entries": 0
+    },
+    "after_state": {
+      "cash": 66948.5,
       "holdings": {
         "AAPL": 90,
         "ADBE": 10,
         "MSFT": 15
       },
-      "transactions": 3,
-      "cash_deployed_pct": 33.1
+      "num_transactions": 3,
+      "num_trace_entries": 27
+    },
+    "measurable_criteria": {
+      "has_positions": true,
+      "cash_positive": true,
+      "diversified": true,
+      "num_positions": 3,
+      "max_concentration_pct": 19.94
+    },
+    "details": {
+      "positions": {
+        "AAPL": {
+          "shares": 90,
+          "value": 19940.4,
+          "concentration_pct": 19.94
+        },
+        "ADBE": {
+          "shares": 10,
+          "value": 5841.8,
+          "concentration_pct": 5.84
+        },
+        "MSFT": {
+          "shares": 15,
+          "value": 7269.3,
+          "concentration_pct": 7.27
+        }
+      },
+      "transactions": 3
     }
   },
   {
-    "case_id": 6,
-    "name": "Audit: Interaction trace captures all stages",
+    "case_id": 10,
+    "name": "Audit: Full interaction trace with all 9 agent types",
     "category": "observability",
+    "test_type": "normal",
     "status": "PASS \u2713",
     "passed": true,
-    "expected": "Trace includes: {'technical', 'ResearchTeam', 'fundamental', 'sentiment', 'news'}",
-    "actual": "Found: {'Trader', 'fundamental', 'FundManager', 'RiskTeam', 'technical', 'ResearchTeam', 'Execution', 'sentiment', 'news'}",
+    "expected": "Trace includes at minimum: {'news', 'sentiment', 'fundamental', 'technical', 'ResearchTeam'}",
+    "actual": "Found: {'news', 'Trader', 'sentiment', 'FundManager', 'RiskTeam', 'technical', 'ResearchTeam', 'Execution', 'fundamental'}",
+    "before_state": {
+      "trace_entries": 0
+    },
+    "after_state": {
+      "trace_entries": 9
+    },
+    "measurable_criteria": {
+      "required_agents_present": true,
+      "agents_found": [
+        "Execution",
+        "FundManager",
+        "ResearchTeam",
+        "RiskTeam",
+        "Trader",
+        "fundamental",
+        "news",
+        "sentiment",
+        "technical"
+      ],
+      "coverage_pct": 100.0
+    },
     "details": {
       "trace_entries": 9,
       "agents": [
@@ -114,21 +392,8 @@
         "news",
         "sentiment",
         "technical"
-      ]
-    }
-  },
-  {
-    "case_id": 7,
-    "name": "Sell Flow: Liquidate existing holding",
-    "category": "end-to-end",
-    "status": "PASS \u2713",
-    "passed": true,
-    "expected": "Pipeline handles existing position gracefully",
-    "actual": "EXECUTED: BUY 50 \u00d7 AAPL @ $221.56 = $11,078.00",
-    "details": {
-      "holdings_after": {
-        "AAPL": 150
-      }
+      ],
+      "missing": []
     }
   }
 ]
